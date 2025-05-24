@@ -12,15 +12,15 @@ export class ConnectGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean> {
-    return of(true);
-    // const skipAlert = true;
-    // return this.authenticationService.isAuthenticated(skipAlert).pipe(
-    //   tap((isAuth) => {
-    //     if (isAuth) {
-    //       this.router.navigate(['/posts']);
-    //     }
-    //   }),
-    //   switchMap((isAuth) => of(!isAuth))
-    // );
+    // return of(true);
+    const skipAlert = true;
+    return this.authenticationService.isAuthenticated(skipAlert).pipe(
+      tap((isAuth) => {
+        if (isAuth) {
+          this.router.navigate(['/conversation-list']);
+        }
+      }),
+      switchMap((isAuth) => of(!isAuth))
+    );
   }
 }

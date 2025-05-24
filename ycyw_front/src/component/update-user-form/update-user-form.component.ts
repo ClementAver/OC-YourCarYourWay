@@ -30,7 +30,7 @@ export class UpdateUserFormComponent {
     this.authenticationService.me().subscribe({
       next: (response) => {
         this.me = response;
-        this.updateUserForm.get('username')?.setValue(response.username);
+        this.updateUserForm.get('name')?.setValue(response.name);
         this.updateUserForm.get('email')?.setValue(response.email);
       },
     });
@@ -39,7 +39,7 @@ export class UpdateUserFormComponent {
   mailRegex = new RegExp('^[\\w\\-.]+@([\\w\\-]+\\.)+[\\w\\-]{2,4}$');
 
   updateUserForm = new FormGroup({
-    username: new FormControl('', [
+    name: new FormControl('', [
       Validators.required,
       Validators.maxLength(256),
     ]),
@@ -60,8 +60,8 @@ export class UpdateUserFormComponent {
     return this.me?.id;
   }
 
-  get username() {
-    return this.updateUserForm.get('username');
+  get name() {
+    return this.updateUserForm.get('name');
   }
 
   get email() {
@@ -74,7 +74,7 @@ export class UpdateUserFormComponent {
 
   handleSubmit() {
     const requestBody = {
-      name: this.updateUserForm.value.username as string,
+      name: this.updateUserForm.value.name as string,
       email: this.updateUserForm.value.email as string,
       password: this.updateUserForm.value.password as string,
     };

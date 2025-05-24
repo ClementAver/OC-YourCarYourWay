@@ -69,7 +69,7 @@ export class AuthenticationService {
         tap((response) => {
           sessionStorage.setItem('token', response.token);
           localStorage.setItem('refreshToken', response.refreshToken);
-          this.router.navigate(['/posts']);
+          this.router.navigate(['/conversation-list']);
         }),
         catchError((error) => this.errorHandler.handleError(error))
       );

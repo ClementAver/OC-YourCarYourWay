@@ -22,7 +22,7 @@ export class Profile {
     this.user = {
       id: -1,
       email: '',
-      username: '',
+      name: '',
       role: 'customer',
     };
   }

@@ -2,7 +2,7 @@
   <section class="w-full rounded-2xl max-w-[600px]">
     <h2 class="mb-2 px-8 w-full flex align-center font-semibold">
       <animated-sign class="my-auto mr-2"></animated-sign>
-      {{ `${employee && employee.username }, ${customer && customer.username}` }} (conversation
+      {{ `${employee && employee.name }, ${customer && customer.name}` }} (conversation
       n°{{ chat && chat.id }})
     </h2>
     <ul class="overflow-y-auto">
@@ -16,8 +16,8 @@
       >
         <span class="font-semibold">{{
           isFromEmployee(message)
-            ? employee && employee.username
-            : customer && customer.username
+            ? employee && employee.name
+            : customer && customer.name
         }}</span>
         <span class="text-sm"> {{ message.publication_time }}</span
         ><br />

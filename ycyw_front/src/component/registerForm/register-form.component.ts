@@ -27,7 +27,7 @@ export class RegisterForm {
   mailRegex = new RegExp('^[\\w\\-.]+@([\\w\\-]+\\.)+[\\w\\-]{2,4}$');
 
   registerForm = new FormGroup({
-    username: new FormControl('', [
+    name: new FormControl('', [
       Validators.required,
       Validators.maxLength(256),
     ]),
@@ -45,8 +45,8 @@ export class RegisterForm {
     ]),
   });
 
-  get username() {
-    return this.registerForm.get('username');
+  get name() {
+    return this.registerForm.get('name');
   }
 
   get email() {
@@ -59,7 +59,7 @@ export class RegisterForm {
 
   handleSubmit() {
     const requestBody = {
-      name: this.registerForm.value.username as string,
+      name: this.registerForm.value.name as string,
       email: this.registerForm.value.email as string,
       password: this.registerForm.value.password as string,
     };

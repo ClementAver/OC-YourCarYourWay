@@ -6,13 +6,13 @@
   <custom-input
     label="Nom d'utilisateur"
     type="text"
-    id="username"
-    formControlName="username"
+    id="name"
+    formControlName="name"
     [required]="true"
     [placeholder]="'JohnDoe'"
   />
-  <p *ngIf="username?.hasError('required')" class="invalid">Champs requis.</p>
-  <p *ngIf="username?.hasError('maxlength')" class="invalid">
+  <p *ngIf="name?.hasError('required')" class="invalid">Champs requis.</p>
+  <p *ngIf="name?.hasError('maxlength')" class="invalid">
     Le nom doit comporter au plus 256 caractères.
   </p>
 

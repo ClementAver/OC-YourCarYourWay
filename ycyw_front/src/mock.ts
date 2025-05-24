@@ -4,13 +4,13 @@ const users: User[] = [
   {
     id: 0,
     email: 'john.dalton@mail.me',
-    username: 'John Dalton',
+    name: 'John Dalton',
     role: 'employee',
   },
   {
     id: 1,
     email: 'jack.dalton@mail.me',
-    username: 'Jack Dalton',
+    name: 'Jack Dalton',
 
     role: 'customer',
   },
