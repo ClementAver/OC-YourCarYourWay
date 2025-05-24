@@ -1,0 +1,28 @@
+:host {
+  margin-bottom: 2rem;
+}
+
+.profile-wrapper {
+  height: fit-content;
+  padding: 1rem;
+  margin-top: 7rem;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5vh;
+}
+
+hr {
+  width: 100%;
+  max-width: 80vw;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+}
+
+.logout-button  {
+  display: block;
+  text-align: center;
+}

@@ -1,0 +1,36 @@
+<form class="login-form" [formGroup]="loginForm" (ngSubmit)="handleSubmit()">
+  <custom-input
+    label="Courriel ou nom d'utilisateur"
+    type="text"
+    id="identifier"
+    formControlName="identifier"
+    [required]="true"
+    [placeholder]="'john.doe@mail.me'"
+  />
+  <p *ngIf="identifier?.hasError('required')" class="invalid">Champs requis.</p>
+  <p *ngIf="identifier?.hasError('maxlength')" class="invalid">
+    Le nom doit comporter au plus 256 caractères.
+  </p>
+
+  <custom-input
+    label="Mot de passe"
+    type="password"
+    id="password"
+    formControlName="password"
+    [placeholder]="'*********'"
+    [required]="true"
+  />
+  <p *ngIf="password?.hasError('required')" class="invalid">Champs requis.</p>
+  <p *ngIf="password?.hasError('minlength')" class="invalid">
+    Le nom doit comporter au moins 8 caractères.
+  </p>
+  <p *ngIf="password?.hasError('maxlength')" class="invalid">
+    Le nom doit comporter au plus 256 caractères.
+  </p>
+  <p *ngIf="password?.hasError('pattern')" class="invalid">
+    Le mot de passe doit contenir au moins un chiffre, une lettre minuscule, une
+    majuscule et un caractère spécial.
+  </p>
+
+  <custom-button type="submit" text="Se connecter"></custom-button>
+</form>

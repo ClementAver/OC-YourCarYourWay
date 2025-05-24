@@ -1,0 +1,37 @@
+<a routerLink="/conversation-list">
+  <img src="ycyw_logo.png" alt="MDD's logo." />
+</a>
+<button
+  class="burger"
+  [ngClass]="{ 'out-of-frame': !classes.navIsVisible }"
+  (click)="toggleDisplay()"
+>
+  <img src="burger.png" alt="Trois segments horizontaux parallèles." />
+</button>
+<nav
+  class="menu-nav"
+  [ngClass]="{ 'out-of-frame': !classes.navIsVisible, hidden: classes.hidden }"
+>
+  <a
+    routerLink="/conversation-list"
+    routerLinkActive="active"
+    (click)="toggleDisplay()"
+    >Mes conversations</a
+  >
+  <a
+    id="profile"
+    routerLink="/profile"
+    routerLinkActive="active"
+    (click)="toggleDisplay()"
+  >
+    <img
+      src="user.png"
+      alt="Silouhette abstraite tracées en mauve sur fond gris."
+    />
+  </a>
+</nav>
+<div
+  [ngClass]="{ 'out-of-frame': !classes.navIsVisible, hidden: classes.hidden }"
+  class="overlay"
+  (click)="toggleDisplay()"
+></div>

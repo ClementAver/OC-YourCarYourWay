@@ -1,0 +1,42 @@
+:host {
+  display: block;
+  width: 100%;
+
+  margin-bottom: 0.4rem;
+}
+
+label {
+  display: block;
+  width: fit-content;
+}
+
+input {
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  border: 1px solid black;
+
+  width: 100%;
+  max-width: 250px;
+  background: white;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.disabled {
+  color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

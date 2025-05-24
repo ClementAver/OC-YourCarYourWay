@@ -1,0 +1,20 @@
+<main class="connect-wrapper">
+  <figure>
+    <img src="ycyw_logo.png" alt="mdd logo." />
+  </figure>
+  <nav>
+    <a routerLink="/login" routerLinkActive="active">
+      <custom-button
+        [text]="'Se connecter'"
+        [classes]="{ outlined: true, disabled: false }"
+      ></custom-button>
+    </a>
+
+    <a routerLink="/register" routerLinkActive="active">
+      <custom-button
+        [text]="'S\'inscrire'"
+        [classes]="{ outlined: true, disabled: false }"
+      ></custom-button>
+    </a>
+  </nav>
+</main>

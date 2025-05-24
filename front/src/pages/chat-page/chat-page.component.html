@@ -1,0 +1,61 @@
+<main>
+  <section class="w-full rounded-2xl max-w-[600px]">
+    <h2 class="mb-2 px-8 w-full flex align-center font-semibold">
+      <animated-sign class="my-auto mr-2"></animated-sign>
+      {{ `${employee && employee.username }, ${customer && customer.username}` }} (conversation
+      n°{{ chat && chat.id }})
+    </h2>
+    <ul class="overflow-y-auto">
+      <li
+        *ngFor="let message of messages"
+        class="mb-2 bg-blue-300 rounded-sm p-4"
+        [ngClass]="{
+          'bg-gray-300': isFromEmployee(message),
+          'bg-gray-400': !isFromEmployee(message)
+        }"
+      >
+        <span class="font-semibold">{{
+          isFromEmployee(message)
+            ? employee && employee.username
+            : customer && customer.username
+        }}</span>
+        <span class="text-sm"> {{ message.publication_time }}</span
+        ><br />
+        <span>{{ message.content }}</span>
+      </li>
+    </ul>
+
+    <form
+      [formGroup]="createCommentForm"
+      (ngSubmit)="handleSubmit()"
+      class="w-full"
+    >
+      <div class="flex w-full bg-white rounded-sm">
+        <label for="message" class="sr-only">Votre Message : </label>
+        <input
+          formControlName="content"
+          id="message"
+          name="message"
+          placeholder="Bonjour..."
+          type="text"
+          class="bg-white border-gray-400 p-2 w-full rounded-l-sm"
+        />
+        <button
+          type="submit"
+          class="bg-gray-400 hover:bg-gray-600 p-2 px-4 font-semibold text-white rounded-r-sm"
+        >
+          Envoyer
+        </button>
+      </div>
+      <p
+        *ngIf="content?.hasError('required') && content?.touched"
+        class="text-xs text-red-600"
+      >
+        Champs requis.
+      </p>
+      <p *ngIf="content?.hasError('maxlength')" class="text-xs text-red-600">
+        Le commentaire doit comporter au plus 256 caractères.
+      </p>
+    </form>
+  </section>
+</main>

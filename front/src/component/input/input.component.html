@@ -1,0 +1,11 @@
+<label [ngClass]="{'sr-only' : classes.labelSr}" [for]="id">{{ label }}</label>
+<input
+  [name]="name"
+  [type]="type"
+  [id]="id"
+  [placeholder]="placeholder"
+  [required]="required"
+  [ngClass]="{'disabled' : classes.disabled}"
+  [value]="value"
+  (input)="handleInput($event)"
+/>

@@ -1,0 +1,17 @@
+form.login-form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: fit-content;
+  max-width: 250px;
+}
+
+.invalid {
+  font-size: 0.8rem;
+  color: red;
+  width: 100%;
+}
+
+.invalid:last-child {
+  margin-bottom: 1rem;
+}
