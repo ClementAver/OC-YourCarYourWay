@@ -3,7 +3,7 @@
     *ngFor="let chat of chats"
     class="w-full h-8 bg-gray-200 odd:bg-gray-300 hover:bg-gray-500 hover:text-white"
   >
-    <a [routerLink]="['/conversation', chat.id]"
+    <a [routerLink]="['/conversation', chat.id]" class="block w-full h-full"
       >Conversation n°{{ chat.id }}</a
     >
   </li>
