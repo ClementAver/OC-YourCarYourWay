@@ -1,9 +1,9 @@
-<main>
+<main class="h-full flex items-center p-2">
   <section class="w-full rounded-2xl max-w-[600px]">
     <h2 class="mb-2 px-8 w-full flex align-center font-semibold">
       <animated-sign class="my-auto mr-2"></animated-sign>
-      {{ `${employee && employee.name }, ${customer && customer.name}` }} (conversation
-      n°{{ chat && chat.id }})
+      {{ `${employee && employee.name }, ${customer && customer.name}` }}
+      (conversation n°{{ chat && chat.id }})
     </h2>
     <ul class="overflow-y-auto">
       <li

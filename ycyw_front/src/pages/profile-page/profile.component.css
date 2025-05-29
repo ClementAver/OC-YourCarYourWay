@@ -1,28 +1,21 @@
-:host {
-  margin-bottom: 2rem;
-}
-
 .profile-wrapper {
-  height: fit-content;
+  margin: auto;
+  height: 100%;
   padding: 1rem;
-  margin-top: 7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 }
 
 h2 {
   width: 100%;
   text-align: center;
-  font-weight: bold;
-  margin-bottom: 5vh;
+  font-weight: 700;
 }
 
-hr {
-  width: 100%;
-  max-width: 80vw;
-  margin: 0 auto;
-  margin-bottom: 2rem;
-}
-
-.logout-button  {
+.logout-button {
   display: block;
   text-align: center;
 }

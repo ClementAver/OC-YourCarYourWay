@@ -10,6 +10,6 @@ import java.util.function.Function;
 public class UserResponseMapper implements Function<User, UserResponse> {
     @Override
     public UserResponse apply(User user) {
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt(), user.getUpdatedAt());
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole().toString(), user.getCreatedAt(), user.getUpdatedAt());
     }
 }

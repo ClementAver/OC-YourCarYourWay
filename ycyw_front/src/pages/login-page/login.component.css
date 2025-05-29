@@ -1,11 +1,16 @@
 .login-wrapper {
-  height: fit-content;
+  margin: auto;
+  height: 100%;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 }
 
-h1 {
+h2 {
   width: 100%;
   text-align: center;
-  font-weight: 400;
-  margin-bottom: 5vh;
+  font-weight: 700;
 }

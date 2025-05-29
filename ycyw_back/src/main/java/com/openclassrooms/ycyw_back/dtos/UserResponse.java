@@ -15,6 +15,7 @@ public class UserResponse {
     int id;
     String name;
     String email;
+    String role;
     LocalDateTime created_at;
     LocalDateTime updated_at;
 }

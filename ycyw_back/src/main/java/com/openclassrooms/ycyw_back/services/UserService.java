@@ -4,6 +4,7 @@ import com.openclassrooms.ycyw_back.dtos.UpdateUserRequest;
 import com.openclassrooms.ycyw_back.dtos.UserRequest;
 import com.openclassrooms.ycyw_back.dtos.UserResponse;
 import com.openclassrooms.ycyw_back.entities.User;
+import com.openclassrooms.ycyw_back.enums.Role;
 import com.openclassrooms.ycyw_back.exceptions.AlreadyExistException;
 import com.openclassrooms.ycyw_back.exceptions.NotFoundException;
 import com.openclassrooms.ycyw_back.mappers.UserResponseMapper;
@@ -58,6 +59,7 @@ public class UserService implements UserInterface {
         User user = new User();
         user.setEmail(userRequest.getEmail());
         user.setName(userRequest.getName());
+        user.setRole(Role.CUSTOMER);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
         userRepository.save(user);
@@ -82,7 +84,7 @@ public class UserService implements UserInterface {
             if (!Objects.equals(userRequest.getPassword(), "")) user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
             userRepository.save(user);
-            return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt(), user.getUpdatedAt());
+            return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole().toString(), user.getCreatedAt(), user.getUpdatedAt());
         } else {
             throw new NotFoundException("Utilisateur non référencé.");
         }

@@ -80,7 +80,7 @@ public class AuthenticationController {
 
         try {
             User user = (User) authentication.getPrincipal();
-            return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt(), user.getUpdatedAt());
+            return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole().toString(), user.getCreatedAt(), user.getUpdatedAt());
         } catch (Exception e) {
             throw new NoUserInContextException("Aucun utilisateur authentifié.");
         }

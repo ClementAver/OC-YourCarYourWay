@@ -1,5 +1,6 @@
 package com.openclassrooms.ycyw_back.entities;
 
+import com.openclassrooms.ycyw_back.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -37,6 +38,10 @@ public class User implements UserDetails {
     @Size(max = 256)
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Size(min = 8)
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "Le mot de passe doit comporter au moins 8 caractères et contenir au moins un chiffre, une lettre minuscule, une majuscule et un caractère spécial.")
