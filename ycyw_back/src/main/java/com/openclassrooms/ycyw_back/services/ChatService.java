@@ -8,7 +8,6 @@ import com.openclassrooms.ycyw_back.exceptions.NotFoundException;
 import com.openclassrooms.ycyw_back.mappers.ChatResponseMapper;
 import com.openclassrooms.ycyw_back.repositories.ChatRepository;
 import com.openclassrooms.ycyw_back.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ public class ChatService implements ChatInterface {
     private final ChatResponseMapper chatResponseMapper;
 
     @Autowired
-    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatResponseMapper chatResponseMapper, EntityManager entityManager) {
+    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatResponseMapper chatResponseMapper) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
         this.chatResponseMapper = chatResponseMapper;
