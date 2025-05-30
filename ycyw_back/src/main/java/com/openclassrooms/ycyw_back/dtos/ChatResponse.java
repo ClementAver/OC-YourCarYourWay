@@ -15,6 +15,6 @@ public class ChatResponse {
     int id;
     LocalDateTime creationTime;
     LocalDateTime updateTime;
-    int customerId;
-    int employeeId;
+    int customer;
+    int employee;
 }
