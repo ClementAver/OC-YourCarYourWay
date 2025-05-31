@@ -27,8 +27,8 @@ public class Message {
     private String content;
 
     @CreationTimestamp
-    @Column(name = "publication_time", updatable = false)
-    private LocalDateTime publicationTime;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     // relations
     @ManyToOne(fetch = FetchType.EAGER)

@@ -18,7 +18,8 @@ export class CustomButton {
     disabled: false,
     logout: false,
   };
-  @Input() action: Function = () => {};
+
+  @Input() action: () => void = () => {};
 
   switchEnability() {
     this.classes.disabled = !this.classes.disabled;

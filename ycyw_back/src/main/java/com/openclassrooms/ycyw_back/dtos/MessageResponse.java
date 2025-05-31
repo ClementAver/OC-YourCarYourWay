@@ -17,5 +17,5 @@ public class MessageResponse {
     String content;
     LocalDateTime createdAt;
     int user;
-    int post;
+    int chat;
 }

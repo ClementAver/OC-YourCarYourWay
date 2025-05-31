@@ -1,13 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { User, Message, Chat } from '../../interfaces';
-import {
-  getChat,
-  getMessages,
-  getUser,
-  postMessage,
-} from '../../services/chat.service';
 import {
   ReactiveFormsModule,
   FormControl,
@@ -16,13 +10,23 @@ import {
 } from '@angular/forms';
 import { AnimatedSign } from '../../component/animatedSign/animated-sign.component';
 import { ActivatedRoute } from '@angular/router';
-
+import { ChatService } from '../../services/Chat.service';
+import { AuthenticationService } from '../../services/Authentication.service';
+import { MessageService } from '../../services/Message.service';
+import { UserService } from '../../services/User.service';
 @Component({
   selector: 'chat-page',
   imports: [CommonModule, ReactiveFormsModule, AnimatedSign],
   templateUrl: './chat-page.component.html',
 })
-export class ChatPage {
+export class ChatPage implements OnInit {
+  chat: Chat | null = null;
+  messages: Message[] | null = [];
+  user: User | null = null;
+  customer: User | null = null;
+  title = 'chat-page';
+  id: number = 0;
+
   createCommentForm = new FormGroup({
     content: new FormControl('', [
       Validators.required,
@@ -34,39 +38,81 @@ export class ChatPage {
     return this.createCommentForm.get('content');
   }
 
-  title = 'chat-page';
-
-  id: number = 0;
-
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    private route: ActivatedRoute,
+    private chatService: ChatService,
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService,
+    private userService: UserService
+  ) {
     this.route.paramMap.subscribe((params) => {
       this.id = Number(params.get('id')) || 0;
-      this.loadChatData();
     });
   }
 
-  chat: Chat | null = null;
-  messages: Message[] | null = [];
-  employee: User | null = null;
-  customer: User | null = null;
+  ngOnInit(): void {
+    this.authenticationService.me().subscribe({
+      next: (user) => {
+        this.user = user;
+        this.getChats();
+      },
+    });
+  }
 
-  loadChatData() {
-    this.chat = getChat(this.id);
-    this.messages = this.chat ? getMessages(this.chat.id) : [];
-    this.employee = this.chat ? getUser(this.chat.employee_id) : null;
-    this.customer = this.chat ? getUser(this.chat.customer_id) : null;
+  getChats(): void {
+    this.chatService.getChat(this.id).subscribe({
+      next: (chat) => {
+        this.chat = chat;
+        if (chat && chat.customer) {
+          this.userService.getUser(chat.customer).subscribe({
+            next: (customer) => {
+              this.customer = customer;
+            },
+          });
+        }
+        if (chat && chat.id) {
+          this.messageService.getMessagesByChatId(chat.id).subscribe({
+            next: (messages) => {
+              this.messages = messages;
+            },
+          });
+        }
+      },
+    });
   }
 
   handleSubmit(): void {
-    postMessage(
-      this.chat?.id as number,
-      this.customer?.id as number,
-      this.createCommentForm.value.content as string,
-      this.messages as Message[]
-    );
+    if (this.createCommentForm.invalid || !this.chat) {
+      return;
+    }
+    const content = this.createCommentForm.value.content?.trim();
+    if (!content) {
+      return;
+    }
+    this.messageService
+      .createMessage(content, this.chat.id, this.user?.id || 0)
+      .subscribe({
+        next: (message) => {
+          if (this.messages) {
+            this.messages.push(message);
+          }
+          this.createCommentForm.reset();
+        },
+      });
   }
 
-  isFromEmployee(message: Message): boolean {
-    return message.author_id === this.employee?.id;
+  isFromUser(message: Message): boolean {
+    return message.user === this.user?.id;
+  }
+
+  formatDate(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+    return new Intl.DateTimeFormat('fr-FR', options).format(new Date(date));
   }
 }

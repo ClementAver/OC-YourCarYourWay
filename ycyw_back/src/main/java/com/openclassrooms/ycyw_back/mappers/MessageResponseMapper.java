@@ -10,6 +10,6 @@ import java.util.function.Function;
 public class MessageResponseMapper implements Function<Message, MessageResponse> {
     @Override
     public MessageResponse apply(Message comment) {
-        return new MessageResponse(comment.getId(), comment.getContent(), comment.getPublicationTime(), comment.getUser().getId(), comment.getChat().getId());
+        return new MessageResponse(comment.getId(), comment.getContent(), comment.getCreatedAt(), comment.getUser().getId(), comment.getChat().getId());
     }
 }

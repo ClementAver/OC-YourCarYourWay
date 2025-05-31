@@ -1,6 +1,5 @@
 package com.openclassrooms.ycyw_back.dtos;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

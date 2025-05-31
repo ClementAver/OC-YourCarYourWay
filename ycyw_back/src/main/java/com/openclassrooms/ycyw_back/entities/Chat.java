@@ -24,12 +24,12 @@ public class Chat {
     private int id;
 
     @CreationTimestamp
-    @Column(name = "creation_time", updatable = false)
-    private LocalDateTime creationTime;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "update_time", updatable = false)
-    private LocalDateTime updateTime;
+    @Column(name = "updated_at", updatable = false)
+    private LocalDateTime updatedAt;
 
     // relations
     @ManyToOne(fetch = FetchType.EAGER)
@@ -40,6 +40,6 @@ public class Chat {
     @JoinColumn(name = "employee_id")
     private User employee;
 
-    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chat", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
 }

@@ -10,6 +10,6 @@ import java.util.function.Function;
 public class ChatResponseMapper implements Function<Chat, ChatResponse> {
     @Override
     public ChatResponse apply(Chat chat) {
-        return new ChatResponse(chat.getId(), chat.getCreationTime(), chat.getUpdateTime(), chat.getCustomer().getId(), chat.getEmployee().getId());
+        return new ChatResponse(chat.getId(), chat.getCreatedAt(), chat.getUpdatedAt(), chat.getCustomer().getId(), chat.getEmployee().getId());
     }
 }

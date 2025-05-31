@@ -1,25 +1,22 @@
 <main class="h-full flex items-center p-2">
   <section class="w-full rounded-2xl max-w-[600px]">
-    <h2 class="mb-2 px-8 w-full flex align-center font-semibold">
+    <h2 class="mb-2 w-full flex align-center font-semibold">
       <animated-sign class="my-auto mr-2"></animated-sign>
-      {{ `${employee && employee.name }, ${customer && customer.name}` }}
-      (conversation n°{{ chat && chat.id }})
+      conversation n°{{ chat && chat.id }}
     </h2>
-    <ul class="overflow-y-auto">
+    <ul class="overflow-y-auto flex flex-col">
       <li
         *ngFor="let message of messages"
-        class="mb-2 bg-blue-300 rounded-sm p-4"
+        class="mb-2 bg-blue-300 rounded-sm p-4 w-9/10"
         [ngClass]="{
-          'bg-gray-300': isFromEmployee(message),
-          'bg-gray-400': !isFromEmployee(message)
+          'bg-gray-300': isFromUser(message),
+          'bg-gray-400 ml-auto': !isFromUser(message)
         }"
       >
         <span class="font-semibold">{{
-          isFromEmployee(message)
-            ? employee && employee.name
-            : customer && customer.name
+          customer && customer.id === message.user ? customer.name : "Support"
         }}</span>
-        <span class="text-sm"> {{ message.publication_time }}</span
+        <span class="text-sm"> {{ formatDate(message.createdAt) }}</span
         ><br />
         <span>{{ message.content }}</span>
       </li>

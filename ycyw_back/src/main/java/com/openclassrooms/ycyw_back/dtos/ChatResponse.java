@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ChatResponse {
     int id;
-    LocalDateTime creationTime;
-    LocalDateTime updateTime;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
     int customer;
     int employee;
 }

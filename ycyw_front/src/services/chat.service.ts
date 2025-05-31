@@ -1,30 +1,55 @@
-import { Message, User } from '../interfaces';
-import { chats, users, messages } from '../mock';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environment';
+import { ErrorHandler } from '../utility/ErrorHandler';
+import { AuthenticationService } from './Authentication.service';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Chat } from '../interfaces';
 
-export function getUser(userId: number) {
-  return users.find((user) => user.id === userId) || null;
-}
+@Injectable({ providedIn: 'root' })
+export class ChatService {
+  private apiURL = environment.apiURL;
 
-export function getChat(chatId: number) {
-  return chats.find((chat) => chat.id === chatId) || null;
-}
+  constructor(
+    private httpClient: HttpClient,
+    private errorHandler: ErrorHandler,
+    private authenticationService: AuthenticationService
+  ) {}
 
-export function getMessages(chatId: number) {
-  return messages.filter((message) => message.chat_id === chatId);
-}
+  createChat(user: string): Observable<Chat> {
+    return this.httpClient
+      .post<Chat>(
+        `${this.apiURL}/chat`,
+        { user: user },
+        {
+          headers: this.authenticationService.getHeaders(),
+        }
+      )
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
 
-export function postMessage(
-  chatId: number,
-  authorId: number,
-  content: string,
-  messages: Message[]
-): void {
-  const newMessage = {
-    id: messages.length,
-    content,
-    publication_time: new Date(),
-    author_id: authorId,
-    chat_id: chatId,
-  };
-  messages.push(newMessage);
+  getChat(chatId: number): Observable<Chat> {
+    return this.httpClient
+      .get<Chat>(`${this.apiURL}/chat/${chatId}`, {
+        headers: this.authenticationService.getHeaders(),
+      })
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
+
+  getChatsByUserId(userId: number): Observable<Chat[]> {
+    return this.httpClient
+      .get<Chat[]>(`${this.apiURL}/chat/user/${userId}`, {
+        headers: this.authenticationService.getHeaders(),
+      })
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
+
+  deleteChat(chatId: number): Observable<number> {
+    return this.httpClient
+      .delete<number>(`${this.apiURL}/chat/${chatId}`, {
+        headers: this.authenticationService.getHeaders(),
+      })
+      .pipe(catchError((error) => this.errorHandler.handleError(error)));
+  }
 }

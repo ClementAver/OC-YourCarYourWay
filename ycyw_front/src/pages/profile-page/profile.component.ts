@@ -23,7 +23,7 @@ export class Profile {
       id: -1,
       email: '',
       name: '',
-      role: 'customer',
+      role: 'CUSTOMER',
     };
   }
 

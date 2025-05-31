@@ -12,11 +12,9 @@ import com.openclassrooms.ycyw_back.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
+
 
 @Service
 public class UserService implements UserInterface {
