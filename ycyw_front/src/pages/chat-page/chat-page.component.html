@@ -23,7 +23,7 @@
     </ul>
 
     <form
-      [formGroup]="createCommentForm"
+      [formGroup]="createMessageForm"
       (ngSubmit)="handleSubmit()"
       class="w-full"
     >
@@ -51,7 +51,7 @@
         Champs requis.
       </p>
       <p *ngIf="content?.hasError('maxlength')" class="text-xs text-red-600">
-        Le commentaire doit comporter au plus 256 caractères.
+        Le message doit comporter au plus 256 caractères.
       </p>
     </form>
   </section>

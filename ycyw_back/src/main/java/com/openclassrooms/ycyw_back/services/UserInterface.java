@@ -3,10 +3,13 @@ package com.openclassrooms.ycyw_back.services;
 import com.openclassrooms.ycyw_back.dtos.UpdateUserRequest;
 import com.openclassrooms.ycyw_back.dtos.UserRequest;
 import com.openclassrooms.ycyw_back.dtos.UserResponse;
+import com.openclassrooms.ycyw_back.entities.User;
 import com.openclassrooms.ycyw_back.exceptions.AlreadyExistException;
 import com.openclassrooms.ycyw_back.exceptions.NotFoundException;
 
 public interface UserInterface {
+
+    User getRawUser(Integer id) throws NotFoundException;
 
     // Register
     void createUser(UserRequest userRequest) throws AlreadyExistException;

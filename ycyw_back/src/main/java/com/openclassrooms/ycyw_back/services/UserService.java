@@ -41,6 +41,18 @@ public class UserService implements UserInterface {
         return userResponseMapper.apply(user);
     }
 
+
+    /**
+     * Get a user by its identifier
+     * @param id The user identifier
+     * @return The User instance
+     * @throws NotFoundException If the user is not found
+     */
+    @Override
+    public User getRawUser(Integer id) throws NotFoundException {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Utilisateur non référencé."));
+    }
+
     // Register
     /**
      * Create a new user

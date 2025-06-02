@@ -1,11 +1,13 @@
 package com.openclassrooms.ycyw_back.services;
 
+import com.openclassrooms.ycyw_back.dtos.ChatRequest;
 import com.openclassrooms.ycyw_back.dtos.MessageRequest;
 import com.openclassrooms.ycyw_back.dtos.MessageResponse;
 import com.openclassrooms.ycyw_back.entities.Chat;
 import com.openclassrooms.ycyw_back.entities.Message;
 import com.openclassrooms.ycyw_back.entities.User;
 import com.openclassrooms.ycyw_back.exceptions.NotFoundException;
+import com.openclassrooms.ycyw_back.mappers.ChatResponseMapper;
 import com.openclassrooms.ycyw_back.mappers.MessageResponseMapper;
 import com.openclassrooms.ycyw_back.repositories.MessageRepository;
 import com.openclassrooms.ycyw_back.repositories.ChatRepository;
@@ -21,14 +23,20 @@ private final MessageRepository messageRepository;
 private final ChatRepository chatRepository;
 private final UserRepository userRepository;
 private final MessageResponseMapper messageResponseMapper;
+private final ChatService chatService;
+private final ChatResponseMapper chatResponseMapper;
+    private final NotifyService notifyService;
 
 
-    public MessageService(MessageRepository messageRepository, ChatRepository chatRepository, UserRepository userRepository, MessageResponseMapper messageResponseMapper) {
+    public MessageService(MessageRepository messageRepository, ChatRepository chatRepository, UserRepository userRepository, MessageResponseMapper messageResponseMapper, ChatService chatService, ChatResponseMapper chatResponseMapper, NotifyService notifyService) {
         this.messageRepository = messageRepository;
 
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
         this.messageResponseMapper = messageResponseMapper;
+        this.chatService = chatService;
+        this.chatResponseMapper = chatResponseMapper;
+        this.notifyService = notifyService;
     }
 
     /**
@@ -46,10 +54,10 @@ private final MessageResponseMapper messageResponseMapper;
     }
 
     /**
-     * Create a new comment
-     * @param messageRequest The comment to create
-     * @return The created comment
-     * @throws NotFoundException If the post is not found
+     * Create a new message
+     * @param messageRequest The message to create
+     * @return The created message
+     * @throws NotFoundException If the chat or the user is not found
      */
     @Override
     public MessageResponse createMessage(MessageRequest messageRequest) throws NotFoundException {
@@ -58,13 +66,18 @@ private final MessageResponseMapper messageResponseMapper;
         Chat chat = chatRepository.findById(messageRequest.getChat())
                 .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
 
-        Message comment = new Message();
-        comment.setUser(user);
-        comment.setChat(chat);
-        comment.setContent(messageRequest.getContent());
+        Message message = new Message();
+        message.setUser(user);
+        message.setChat(chat);
+        message.setContent(messageRequest.getContent());
 
-        messageRepository.save(comment);
+        messageRepository.save(message);
 
-        return messageResponseMapper.apply(comment);
+        chatService.updateChat(chat.getId());
+
+        notifyService.notifyChatUpdate(chat.getCustomer().getId(), chatResponseMapper.apply(chat));
+        notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
+
+        return messageResponseMapper.apply(message);
     }
 }

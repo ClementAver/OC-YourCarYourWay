@@ -27,7 +27,7 @@ export class ChatPage implements OnInit {
   title = 'chat-page';
   id: number = 0;
 
-  createCommentForm = new FormGroup({
+  createMessageForm = new FormGroup({
     content: new FormControl('', [
       Validators.required,
       Validators.maxLength(256),
@@ -35,7 +35,7 @@ export class ChatPage implements OnInit {
   });
 
   get content() {
-    return this.createCommentForm.get('content');
+    return this.createMessageForm.get('content');
   }
 
   constructor(
@@ -82,10 +82,10 @@ export class ChatPage implements OnInit {
   }
 
   handleSubmit(): void {
-    if (this.createCommentForm.invalid || !this.chat) {
+    if (this.createMessageForm.invalid || !this.chat) {
       return;
     }
-    const content = this.createCommentForm.value.content?.trim();
+    const content = this.createMessageForm.value.content?.trim();
     if (!content) {
       return;
     }
@@ -96,7 +96,7 @@ export class ChatPage implements OnInit {
           if (this.messages) {
             this.messages.push(message);
           }
-          this.createCommentForm.reset();
+          this.createMessageForm.reset();
         },
       });
   }

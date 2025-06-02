@@ -3,9 +3,9 @@
     *ngFor="let chat of chats"
     class="w-full h-fit bg-gray-200 odd:bg-gray-300 hover:bg-gray-500 hover:text-white flex items-center justify-between px-2"
   >
-    <a [routerLink]="['/conversation', chat.id]" class="block w-full h-full"
-      >Conversation n°{{ chat.id }}</a
-    >
+    <a [routerLink]="['/conversation', chat.id]" class="block w-full h-full">
+      Conversation n°{{ chat.id }} | dernier message : {{ chat.updatedAt | date:'dd/MM/yyyy HH:mm' }}
+    </a>
     <custom-button
       *ngIf="user && user.role === 'EMPLOYEE'"
       type="button"
@@ -18,9 +18,7 @@
     *ngIf="!chats || !chats.length"
     class="flex flex-col items-center justify-center text-gray-500 h-full"
   >
-    <p>
-      Il semblerait que vous n'ayez commencé aucune conversation.
-    </p>
+    <p>Il semblerait que vous n'ayez commencé aucune conversation.</p>
     <custom-button
       *ngIf="user && user.role === 'CUSTOMER'"
       type="button"

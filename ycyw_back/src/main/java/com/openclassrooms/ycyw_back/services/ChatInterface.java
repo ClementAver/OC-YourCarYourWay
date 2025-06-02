@@ -2,8 +2,8 @@ package com.openclassrooms.ycyw_back.services;
 
 import com.openclassrooms.ycyw_back.dtos.ChatRequest;
 import com.openclassrooms.ycyw_back.dtos.ChatResponse;
-import com.openclassrooms.ycyw_back.dtos.MessageResponse;
 import com.openclassrooms.ycyw_back.exceptions.NotFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.stream.Stream;
 

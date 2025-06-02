@@ -52,4 +52,11 @@ export class ChatService {
       })
       .pipe(catchError((error) => this.errorHandler.handleError(error)));
   }
+
+  getChatUpdates(userId: number): EventSource {
+    const token = this.authenticationService.getAccessToken();
+    return new EventSource(
+      `${this.apiURL}/chat/user/${userId}/stream?token=${token}`
+    );
+  }
 }

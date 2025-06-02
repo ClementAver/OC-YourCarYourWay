@@ -11,22 +11,30 @@ import com.openclassrooms.ycyw_back.repositories.ChatRepository;
 import com.openclassrooms.ycyw_back.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 @Service
 public class ChatService implements ChatInterface {
+    private final Map<Integer, List<SseEmitter>> emitters = new ConcurrentHashMap<>();
 
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
     private final ChatResponseMapper chatResponseMapper;
+    private final NotifyService notifyService;
 
     @Autowired
-    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatResponseMapper chatResponseMapper) {
+    public ChatService(ChatRepository chatRepository, UserRepository userRepository, ChatResponseMapper chatResponseMapper, NotifyService notifyService) {
         this.chatRepository = chatRepository;
         this.userRepository = userRepository;
         this.chatResponseMapper = chatResponseMapper;
+        this.notifyService = notifyService;
     }
 
     /**
@@ -49,8 +57,26 @@ public class ChatService implements ChatInterface {
 
 
         chatRepository.save(chat);
+
+        notifyService.notifyChatUpdate(chat.getCustomer().getId(), chatResponseMapper.apply(chat));
+        notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
+
         return chatResponseMapper.apply(chat);
     }
+
+    /**
+     * Update a chat
+     * @param id The chat identifier
+     * @throws NotFoundException If the chat is not found
+     */
+    public void updateChat(int id) throws NotFoundException {
+        Chat chat = chatRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
+
+        chat.setUpdatedAt(LocalDateTime.now());
+        chatRepository.save(chat);
+    }
+
 
     /**
      * Get a chat by its identifier
@@ -85,12 +111,8 @@ public class ChatService implements ChatInterface {
             chats = chatRepository.findByCustomerId(user.getId());
         }
 
-        System.out.println("Nombre de chats : " + chats.size());
-
         return chats.stream().map(chatResponseMapper);
     }
-
-
 
     /**
      * Delete a chat by its identifier
@@ -104,6 +126,10 @@ public class ChatService implements ChatInterface {
                 .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
 
         chatRepository.delete(chat);
+
+        notifyService.notifyChatUpdate(chat.getCustomer().getId(), chatResponseMapper.apply(chat));
+        notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
+
         return chat.getId();
     }
 }
