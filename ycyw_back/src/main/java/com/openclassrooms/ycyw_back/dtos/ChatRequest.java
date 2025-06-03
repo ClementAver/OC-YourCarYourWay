@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRequest {
-    private int id;
-    private int user;
+    int id;
+    int user;
 }

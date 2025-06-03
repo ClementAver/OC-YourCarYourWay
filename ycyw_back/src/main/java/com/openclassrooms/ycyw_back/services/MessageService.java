@@ -1,11 +1,11 @@
 package com.openclassrooms.ycyw_back.services;
 
-import com.openclassrooms.ycyw_back.dtos.ChatRequest;
 import com.openclassrooms.ycyw_back.dtos.MessageRequest;
 import com.openclassrooms.ycyw_back.dtos.MessageResponse;
 import com.openclassrooms.ycyw_back.entities.Chat;
 import com.openclassrooms.ycyw_back.entities.Message;
 import com.openclassrooms.ycyw_back.entities.User;
+import com.openclassrooms.ycyw_back.enums.Role;
 import com.openclassrooms.ycyw_back.exceptions.NotFoundException;
 import com.openclassrooms.ycyw_back.mappers.ChatResponseMapper;
 import com.openclassrooms.ycyw_back.mappers.MessageResponseMapper;
@@ -73,9 +73,12 @@ private final ChatResponseMapper chatResponseMapper;
 
         messageRepository.save(message);
 
-        chatService.updateChat(chat.getId());
+        if (user.getRole() == Role.CUSTOMER) {
+            chatService.updateChat(chat.getId(), true);
+        } else if (user.getRole() == Role.EMPLOYEE) {
+            chatService.updateChat(chat.getId(), false);
+        }
 
-        notifyService.notifyChatUpdate(chat.getCustomer().getId(), chatResponseMapper.apply(chat));
         notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
 
         return messageResponseMapper.apply(message);

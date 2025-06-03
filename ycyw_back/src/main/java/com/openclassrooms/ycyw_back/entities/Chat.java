@@ -31,6 +31,9 @@ public class Chat {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name="pending", nullable = false)
+    private boolean pending;
+
     // relations
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")

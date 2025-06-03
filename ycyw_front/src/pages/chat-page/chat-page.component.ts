@@ -14,6 +14,7 @@ import { ChatService } from '../../services/Chat.service';
 import { AuthenticationService } from '../../services/Authentication.service';
 import { MessageService } from '../../services/Message.service';
 import { UserService } from '../../services/User.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'chat-page',
   imports: [CommonModule, ReactiveFormsModule, AnimatedSign],
@@ -43,7 +44,8 @@ export class ChatPage implements OnInit {
     private chatService: ChatService,
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
     this.route.paramMap.subscribe((params) => {
       this.id = Number(params.get('id')) || 0;
@@ -54,12 +56,12 @@ export class ChatPage implements OnInit {
     this.authenticationService.me().subscribe({
       next: (user) => {
         this.user = user;
-        this.getChats();
+        this.getChat();
       },
     });
   }
 
-  getChats(): void {
+  getChat(): void {
     this.chatService.getChat(this.id).subscribe({
       next: (chat) => {
         this.chat = chat;
@@ -77,6 +79,9 @@ export class ChatPage implements OnInit {
             },
           });
         }
+      },
+      error: () => {
+        this.router.navigate(['/conversation-list']);
       },
     });
   }
@@ -97,6 +102,9 @@ export class ChatPage implements OnInit {
             this.messages.push(message);
           }
           this.createMessageForm.reset();
+        },
+        error: () => {
+          this.router.navigate(['/conversation-list']);
         },
       });
   }

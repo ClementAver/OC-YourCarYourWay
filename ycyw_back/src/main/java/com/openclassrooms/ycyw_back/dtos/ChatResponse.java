@@ -15,6 +15,7 @@ public class ChatResponse {
     int id;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+    boolean pending;
     int customer;
     int employee;
 }

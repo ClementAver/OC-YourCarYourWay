@@ -58,25 +58,10 @@ public class ChatService implements ChatInterface {
 
         chatRepository.save(chat);
 
-        notifyService.notifyChatUpdate(chat.getCustomer().getId(), chatResponseMapper.apply(chat));
         notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
 
         return chatResponseMapper.apply(chat);
     }
-
-    /**
-     * Update a chat
-     * @param id The chat identifier
-     * @throws NotFoundException If the chat is not found
-     */
-    public void updateChat(int id) throws NotFoundException {
-        Chat chat = chatRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
-
-        chat.setUpdatedAt(LocalDateTime.now());
-        chatRepository.save(chat);
-    }
-
 
     /**
      * Get a chat by its identifier
@@ -115,6 +100,20 @@ public class ChatService implements ChatInterface {
     }
 
     /**
+     * Update a chat
+     * @param id The chat identifier
+     * @throws NotFoundException If the chat is not found
+     */
+    public void updateChat(int id, boolean pending) throws NotFoundException {
+        Chat chat = chatRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
+
+        chat.setUpdatedAt(LocalDateTime.now());
+        chat.setPending(pending);
+        chatRepository.save(chat);
+    }
+
+    /**
      * Delete a chat by its identifier
      * @param id The chat identifier
      * @return The identifier of the deleted chats
@@ -127,8 +126,6 @@ public class ChatService implements ChatInterface {
 
         chatRepository.delete(chat);
 
-        notifyService.notifyChatUpdate(chat.getCustomer().getId(), chatResponseMapper.apply(chat));
-        notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
 
         return chat.getId();
     }

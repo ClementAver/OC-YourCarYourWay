@@ -3,8 +3,26 @@
     *ngFor="let chat of chats"
     class="w-full h-fit bg-gray-200 odd:bg-gray-300 hover:bg-gray-500 hover:text-white flex items-center justify-between px-2"
   >
-    <a [routerLink]="['/conversation', chat.id]" class="block w-full h-full">
-      Conversation n°{{ chat.id }} | dernier message : {{ chat.updatedAt | date:'dd/MM/yyyy HH:mm' }}
+    <a
+      [routerLink]="['/conversation', chat.id]"
+      class="w-full h-full flex justify-between"
+    >
+      <span
+        >Conversation n°{{ chat.id }} | dernier message :
+        {{ chat.updatedAt | date : "dd/MM/yyyy HH:mm" }}</span
+      >
+      <div
+        *ngIf="chat.pending"
+        class="w-6 h-6 rounded-full border-1 bg-yellow-500 text-center"
+      >
+        !
+      </div>
+      <div
+        *ngIf="!chat.pending"
+        class="w-6 h-6 rounded-full border-1 bg-green-300 text-center"
+      >
+        ✓
+      </div>
     </a>
     <custom-button
       *ngIf="user && user.role === 'EMPLOYEE'"

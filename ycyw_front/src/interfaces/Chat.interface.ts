@@ -6,4 +6,5 @@ export interface Chat {
   customer: number;
   createdAt: string;
   updatedAt: string;
+  pending: boolean;
 }
