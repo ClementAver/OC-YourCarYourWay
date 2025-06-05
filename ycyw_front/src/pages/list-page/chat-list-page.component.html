@@ -5,7 +5,7 @@
   >
     <a
       [routerLink]="['/conversation', chat.id]"
-      class="w-full h-full flex justify-between"
+      class="w-full h-full items-center flex justify-between"
     >
       <span
         >Conversation n°{{ chat.id }} | dernier message :
@@ -13,7 +13,7 @@
       >
       <div
         *ngIf="chat.pending"
-        class="w-6 h-6 rounded-full border-1 bg-yellow-500 text-center"
+        class="min-w-6 h-6 rounded-full border-1 bg-yellow-500 text-center"
       >
         !
       </div>

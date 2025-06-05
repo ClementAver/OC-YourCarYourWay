@@ -1,26 +1,27 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Chat, Message, User } from '../../interfaces';
 import { RouterLink, Router } from '@angular/router';
 import { AuthenticationService } from '../../services/Authentication.service';
 import { ChatService } from '../../services/Chat.service';
 import { CustomButton } from '../../component/button/button.component';
-import { NgZone } from '@angular/core';
 import { ErrorHandler } from '../../utility/ErrorHandler';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'chat-list-page',
   imports: [CommonModule, RouterLink, CustomButton],
   templateUrl: './chat-list-page.component.html',
-  styleUrl: './chat-list-page.component.css',
+  styleUrls: ['./chat-list-page.component.css'], // corrigé : styleUrls au pluriel
 })
-export class ChatListPage implements OnInit {
+export class ChatListPage implements OnInit, OnDestroy {
   title = 'chat-list-page';
   chats: Chat[] = [];
   updatedChats = new Set<number>();
   messages: Message[] | null = [];
   user: User | null = null;
-  eventSource?: EventSource;
+
+  chatUpdatesSubscription?: Subscription;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -51,44 +52,34 @@ export class ChatListPage implements OnInit {
         });
 
         // Initializes an eventSource for the user chats updates.
-        let eS = this.chatService.getChatUpdates(user.id || 0);
-
-        this.eventSource = eS;
-
-        eS.onmessage = (event) => {
-          this.ngZone.run(() => {
-            const chat: Chat = JSON.parse(event.data);
-            const chatIndex = this.chats.findIndex((c) => c.id === chat.id);
-            if (chatIndex !== -1) {
-              this.chats[chatIndex] = chat;
-            } else {
-              const tmpChats = [...this.chats];
-              tmpChats.push(chat);
-              tmpChats.sort((a, b) => {
-                return (
-                  new Date(b.updatedAt).getTime() -
-                  new Date(a.updatedAt).getTime()
-                );
+        this.chatUpdatesSubscription = this.chatService
+          .getChatUpdates(user.id)
+          .subscribe({
+            next: (chat) => {
+              this.ngZone.run(() => {
+                const index = this.chats.findIndex((c) => c.id === chat.id);
+                if (index !== -1) {
+                  this.chats[index] = chat;
+                } else {
+                  this.chats = [...this.chats, chat].sort(
+                    (a, b) =>
+                      new Date(b.updatedAt).getTime() -
+                      new Date(a.updatedAt).getTime()
+                  );
+                }
               });
-              this.chats = tmpChats;
-            }
+            },
+            error: (err) => this.errorHandler.handleError(err),
           });
-        };
-
-        // eS.onerror = (error) => {
-        //   this.eventSource?.close();
-        //   this.errorHandler.handleError(error);
-        // };
       },
     });
   }
 
-  // ngOnDestroy(): void {
-  //   // Closes the eventSource when the component is destroyed.
-  //   if (this.eventSource) {
-  //     this.eventSource.close();
-  //   }
-  // }
+  ngOnDestroy(): void {
+    if (this.chatUpdatesSubscription) {
+      this.chatUpdatesSubscription.unsubscribe();
+    }
+  }
 
   goToChatPage(id: number) {
     this.router.navigate(['/conversation', id]);

@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewChecked,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 
 import { User, Message, Chat } from '../../interfaces';
 import {
@@ -15,18 +21,34 @@ import { AuthenticationService } from '../../services/Authentication.service';
 import { MessageService } from '../../services/Message.service';
 import { UserService } from '../../services/User.service';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'chat-page',
   imports: [CommonModule, ReactiveFormsModule, AnimatedSign],
   templateUrl: './chat-page.component.html',
+  styleUrls: ['./chat-page.component.css'],
 })
-export class ChatPage implements OnInit {
+export class ChatPage implements OnInit, AfterViewChecked {
   chat: Chat | null = null;
   messages: Message[] | null = [];
   user: User | null = null;
   customer: User | null = null;
   title = 'chat-page';
   id: number = 0;
+
+  @ViewChild('messagesList')
+  private messagesList!: ElementRef<HTMLUListElement>;
+
+  ngAfterViewChecked() {
+    this.scrollAtChange();
+  }
+
+  scrollAtChange(): void {
+    this.messagesList.nativeElement.scrollTo({
+      top: this.messagesList.nativeElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  }
 
   createMessageForm = new FormGroup({
     content: new FormControl('', [

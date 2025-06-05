@@ -2,12 +2,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #FF3B00;
-  --color-secondary: #225EC4;
+  --color-primary: #ff3b00;
+  --color-secondary: #225ec4;
 }
 
 :root {
   font-size: 16px;
+}
+
+html {
+  overflow: hidden;
+  height: 100dvh;
+  width: 100dvh;
 }
 
 body {

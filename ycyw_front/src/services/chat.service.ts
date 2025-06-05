@@ -53,10 +53,34 @@ export class ChatService {
       .pipe(catchError((error) => this.errorHandler.handleError(error)));
   }
 
-  getChatUpdates(userId: number): EventSource {
-    const token = this.authenticationService.getAccessToken();
-    return new EventSource(
-      `${this.apiURL}/chat/user/${userId}/stream?token=${token}`
-    );
+  getChatUpdates(userId: number): Observable<Chat> {
+    return new Observable<Chat>((subscriber) => {
+      const token = this.authenticationService.getAccessToken();
+      const eventSource = new EventSource(
+        `${this.apiURL}/chat/user/${userId}/stream?token=${token}`
+      );
+
+      console.info(`Connecting to chat updates for user ID: ${userId}`);
+      eventSource.onmessage = (event) => {
+        const chat = JSON.parse(event.data) as Chat;
+        subscriber.next(chat);
+      };
+
+      eventSource.onerror = (error) => {
+        if (eventSource.readyState === EventSource.CLOSED) {
+          subscriber.complete();
+          console.error(
+            `EventSource closed for user ID: ${userId}, error: ${error}`
+          );
+        } else {
+          subscriber.error(error);
+        }
+      };
+
+      return () => {
+        console.info(`Unsubscribing from chat updates for user ID: ${userId}`);
+        eventSource.close();
+      };
+    });
   }
 }

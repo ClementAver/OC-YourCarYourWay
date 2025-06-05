@@ -1,58 +1,59 @@
-<main class="h-full flex items-center p-2">
-  <section class="w-full rounded-2xl max-w-[600px]">
-    <h2 class="mb-2 w-full flex align-center font-semibold">
-      <animated-sign class="my-auto mr-2"></animated-sign>
-      conversation n°{{ chat && chat.id }}
-    </h2>
-    <ul class="overflow-y-auto flex flex-col">
-      <li
-        *ngFor="let message of messages"
-        class="mb-2 bg-blue-300 rounded-sm p-4 w-9/10"
-        [ngClass]="{
-          'bg-gray-300': isFromUser(message),
-          'bg-gray-400 ml-auto': !isFromUser(message)
-        }"
-      >
-        <span class="font-semibold">{{
-          customer && customer.id === message.user ? customer.name : "Support"
-        }}</span>
-        <span class="text-sm"> {{ formatDate(message.createdAt) }}</span
-        ><br />
-        <span>{{ message.content }}</span>
-      </li>
-    </ul>
+<main class="w-[100dvw] h-full max-h-[100dvh] px-2 pt-[3.5rem] pb-[4.5rem] overflow-hidden">
+  <h2
+    class="w-full h-14 flex align-center font-semibold fixed top-24 left-0 p-4 bg-gray-50 border-b-1 border-gray-black"
+  >
+    <animated-sign class="my-auto mr-2"></animated-sign>
+    conversation n°{{ chat && chat.id }}
+  </h2>
 
-    <form
-      [formGroup]="createMessageForm"
-      (ngSubmit)="handleSubmit()"
-      class="w-full"
+  <ul #messagesList class="overflow-auto max-h-full py-2">
+    <li
+      *ngFor="let message of messages"
+      class="mb-2 bg-blue-300 rounded-sm p-4 w-9/10"
+      [ngClass]="{
+        'bg-gray-300': isFromUser(message),
+        'bg-gray-400 ml-auto': !isFromUser(message)
+      }"
     >
-      <div class="flex w-full bg-white rounded-sm">
-        <label for="message" class="sr-only">Votre Message : </label>
-        <input
-          formControlName="content"
-          id="message"
-          name="message"
-          placeholder="Bonjour..."
-          type="text"
-          class="bg-white border-gray-400 p-2 w-full rounded-l-sm"
-        />
-        <button
-          type="submit"
-          class="bg-gray-400 hover:bg-gray-600 p-2 px-4 font-semibold text-white rounded-r-sm"
-        >
-          Envoyer
-        </button>
-      </div>
-      <p
-        *ngIf="content?.hasError('required') && content?.touched"
-        class="text-xs text-red-600"
+      <span class="font-semibold">{{
+        customer && customer.id === message.user ? customer.name : "Support"
+      }}</span>
+      <span class="text-sm"> {{ formatDate(message.createdAt) }}</span
+      ><br />
+      <span>{{ message.content }}</span>
+    </li>
+  </ul>
+
+  <form
+    [formGroup]="createMessageForm"
+    (ngSubmit)="handleSubmit()"
+    class="w-full h-18 fixed bottom-0 left-0 p-4 bg-gray-50 border-t-1 border-gray-black"
+  >
+    <div class="flex w-full bg-white rounded-sm">
+      <label for="message" class="sr-only">Votre Message : </label>
+      <input
+        formControlName="content"
+        id="message"
+        name="message"
+        placeholder="Bonjour..."
+        type="text"
+        class="bg-white border-gray-400 p-2 w-full rounded-l-sm"
+      />
+      <button
+        type="submit"
+        class="bg-gray-400 hover:bg-gray-600 p-2 px-4 font-semibold text-white rounded-r-sm"
       >
-        Champs requis.
-      </p>
-      <p *ngIf="content?.hasError('maxlength')" class="text-xs text-red-600">
-        Le message doit comporter au plus 256 caractères.
-      </p>
-    </form>
-  </section>
+        Envoyer
+      </button>
+    </div>
+    <p
+      *ngIf="content?.hasError('required') && content?.touched"
+      class="text-xs text-red-600"
+    >
+      Champs requis.
+    </p>
+    <p *ngIf="content?.hasError('maxlength')" class="text-xs text-red-600">
+      Le message doit comporter au plus 256 caractères.
+    </p>
+  </form>
 </main>
