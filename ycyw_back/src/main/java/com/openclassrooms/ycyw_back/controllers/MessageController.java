@@ -7,8 +7,11 @@ import com.openclassrooms.ycyw_back.services.MessageService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import java.util.stream.Stream;
 
 @RestController
@@ -38,9 +41,18 @@ public class MessageController {
      * @return The created message
      * @throws NotFoundException If the chat is not found
      */
+
+    // Legacy : the App now use a WebSocket.
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping("/message")
     public MessageResponse createMessage(@Valid @RequestBody MessageRequest messageRequest) throws NotFoundException {
+        return messageService.createMessage(messageRequest);
+    }
+
+    @MessageMapping("/chat.sendMessage.{chatId}")
+    // Indicates that the return value of a message-handling method should be sent as a Message to the specified destinations.
+    @SendTo("/topic/chat.{chatId}")
+    public MessageResponse sendMessage(MessageRequest messageRequest) throws NotFoundException {
         return messageService.createMessage(messageRequest);
     }
 }

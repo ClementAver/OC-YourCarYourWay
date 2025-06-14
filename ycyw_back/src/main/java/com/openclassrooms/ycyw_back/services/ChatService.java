@@ -108,7 +108,7 @@ public class ChatService implements ChatInterface {
         Chat chat = chatRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
 
-        chat.setUpdatedAt(LocalDateTime.now());
+        chat.setUpdatedAt(LocalDateTime.now()); // Useless, to be checked.
         chat.setPending(pending);
         chatRepository.save(chat);
     }

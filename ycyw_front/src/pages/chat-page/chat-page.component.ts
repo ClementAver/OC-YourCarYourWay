@@ -5,6 +5,7 @@ import {
   AfterViewChecked,
   ElementRef,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
 
 import { User, Message, Chat } from '../../interfaces';
@@ -21,6 +22,7 @@ import { AuthenticationService } from '../../services/Authentication.service';
 import { MessageService } from '../../services/Message.service';
 import { UserService } from '../../services/User.service';
 import { Router } from '@angular/router';
+import { ChatWSService } from '../../services/ChatWS.service';
 
 @Component({
   selector: 'chat-page',
@@ -28,7 +30,7 @@ import { Router } from '@angular/router';
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.css'],
 })
-export class ChatPage implements OnInit, AfterViewChecked {
+export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
   chat: Chat | null = null;
   messages: Message[] | null = [];
   user: User | null = null;
@@ -67,7 +69,8 @@ export class ChatPage implements OnInit, AfterViewChecked {
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private chatWSService: ChatWSService
   ) {
     this.route.paramMap.subscribe((params) => {
       this.id = Number(params.get('id')) || 0;
@@ -81,6 +84,10 @@ export class ChatPage implements OnInit, AfterViewChecked {
         this.getChat();
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.chatWSService.disconnect();
   }
 
   getChat(): void {
@@ -98,6 +105,13 @@ export class ChatPage implements OnInit, AfterViewChecked {
           this.messageService.getMessagesByChatId(chat.id).subscribe({
             next: (messages) => {
               this.messages = messages;
+              // Souscription WebSocket ici
+              this.chatWSService.subscribeToChat(chat.id);
+              this.chatWSService.getMessages().subscribe((message) => {
+                if (this.messages) {
+                  this.messages.push(message);
+                }
+              });
             },
           });
         }
@@ -116,19 +130,13 @@ export class ChatPage implements OnInit, AfterViewChecked {
     if (!content) {
       return;
     }
-    this.messageService
-      .createMessage(content, this.chat.id, this.user?.id || 0)
-      .subscribe({
-        next: (message) => {
-          if (this.messages) {
-            this.messages.push(message);
-          }
-          this.createMessageForm.reset();
-        },
-        error: () => {
-          this.router.navigate(['/conversation-list']);
-        },
-      });
+    // Envoi via WebSocket
+    this.chatWSService.sendMessage(this.chat.id, {
+      content,
+      chat: this.chat.id,
+      user: this.user?.id || 0,
+    });
+    this.createMessageForm.reset();
   }
 
   isFromUser(message: Message): boolean {
