@@ -37,12 +37,16 @@ export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
   customer: User | null = null;
   title = 'chat-page';
   id: number = 0;
+  scroll: boolean = true;
 
   @ViewChild('messagesList')
   private messagesList!: ElementRef<HTMLUListElement>;
 
   ngAfterViewChecked() {
-    this.scrollAtChange();
+    if (this.scroll) {
+      this.scrollAtChange();
+      this.scroll = false;
+    }
   }
 
   scrollAtChange(): void {
@@ -105,11 +109,13 @@ export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
           this.messageService.getMessagesByChatId(chat.id).subscribe({
             next: (messages) => {
               this.messages = messages;
+              this.scroll = true;
               // Souscription WebSocket ici
               this.chatWSService.subscribeToChat(chat.id);
               this.chatWSService.getMessages().subscribe((message) => {
                 if (this.messages) {
                   this.messages.push(message);
+                  this.scroll = true;
                 }
               });
             },

@@ -12,21 +12,41 @@ export class ChatWSService {
   private subscription: StompSubscription | null = null;
   private wsURL = environment.wsURL;
 
+  private connectedPromise: Promise<void>;
+  private connectedResolver!: () => void;
+
   constructor() {
+    this.connectedPromise = new Promise((resolve) => {
+      this.connectedResolver = resolve;
+    });
+
     this.client = new Client({
-      brokerURL: undefined, //  ↓ 
+      brokerURL: undefined, // fallback to SockJS
       webSocketFactory: () => new SockJS(`${this.wsURL}/chat`),
       reconnectDelay: 5000,
     });
-    this.client.onConnect = () => {};
-    // Starts the connection
-    this.client.activate();
+
+    this.client.onConnect = () => {
+      this.connectedResolver();
+    };
+
+    this.client.activate(); // initial activation
   }
 
-  subscribeToChat(chatId: number) {
+  async subscribeToChat(chatId: number) {
+    if (!this.client.active) {
+      // re-activate if previously disconnected
+      this.connectedPromise = new Promise((resolve) => {
+        this.connectedResolver = resolve;
+      });
+      this.client.activate();
+      await this.connectedPromise;
+    }
+
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+
     this.subscription = this.client.subscribe(
       `/topic/chat.${chatId}`,
       (message: IMessage) => {

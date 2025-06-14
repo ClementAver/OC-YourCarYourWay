@@ -56,9 +56,11 @@ export class ChatListPage implements OnInit, OnDestroy {
           .getChatUpdates(user.id)
           .subscribe({
             next: (chat) => {
+              console.log(chat.pending);
               this.ngZone.run(() => {
                 const index = this.chats.findIndex((c) => c.id === chat.id);
                 if (index !== -1) {
+                  // console.log(chat.pending);
                   this.chats[index] = chat;
                 } else {
                   this.chats = [...this.chats, chat].sort(

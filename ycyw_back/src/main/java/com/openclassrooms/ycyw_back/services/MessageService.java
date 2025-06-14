@@ -79,7 +79,10 @@ private final ChatResponseMapper chatResponseMapper;
             chatService.updateChat(chat.getId(), false);
         }
 
-        notifyService.notifyChatUpdate(chat.getEmployee().getId(), chatResponseMapper.apply(chat));
+        Chat updatedChat = chatRepository.findById(chat.getId())
+                .orElseThrow(() -> new NotFoundException("Conversation non référencé."));
+
+        notifyService.notifyChatUpdate(updatedChat.getEmployee().getId(), chatResponseMapper.apply(updatedChat));
 
         return messageResponseMapper.apply(message);
     }
