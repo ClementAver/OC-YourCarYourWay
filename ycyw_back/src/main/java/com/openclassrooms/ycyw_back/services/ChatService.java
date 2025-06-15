@@ -11,18 +11,13 @@ import com.openclassrooms.ycyw_back.repositories.ChatRepository;
 import com.openclassrooms.ycyw_back.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 @Service
 public class ChatService implements ChatInterface {
-    private final Map<Integer, List<SseEmitter>> emitters = new ConcurrentHashMap<>();
 
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;

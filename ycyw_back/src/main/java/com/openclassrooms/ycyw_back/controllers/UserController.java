@@ -7,9 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 @RestController
 @RequestMapping("/api")
 public class UserController {

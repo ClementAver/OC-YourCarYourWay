@@ -74,7 +74,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails.getAuthorities() // User roles (no roles in this context).
                     );
 
-                    // Adds other informations like the IP address or session ID (not used here in favour of JWT) to the token.
+                    // Adds other information like the IP address or session ID (not used here in favour of JWT) to the token.
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     // Sets the security context.
                     SecurityContextHolder.getContext().setAuthentication(authToken);

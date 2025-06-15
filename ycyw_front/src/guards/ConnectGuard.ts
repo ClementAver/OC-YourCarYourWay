@@ -12,7 +12,6 @@ export class ConnectGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean> {
-    // return of(true);
     const skipAlert = true;
     return this.authenticationService.isAuthenticated(skipAlert).pipe(
       tap((isAuth) => {

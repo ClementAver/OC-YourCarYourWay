@@ -112,7 +112,8 @@ export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
             next: (messages) => {
               this.messages = messages;
               this.scroll = true;
-              // Souscription WebSocket ici
+
+              // WebSocket subscription.
               this.chatWSService.subscribeToChat(chat.id);
               this.chatWSService.getMessages().subscribe((message) => {
                 if (this.messages) {
@@ -151,7 +152,6 @@ export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
       this.router.navigate(['/connect']);
     }
 
-    // Envoi via WebSocket
     this.chatWSService.sendMessage(this.chat.id, {
       content,
       chat: this.chat.id,

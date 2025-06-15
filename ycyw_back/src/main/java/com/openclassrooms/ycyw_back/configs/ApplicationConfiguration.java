@@ -28,7 +28,7 @@ public class ApplicationConfiguration {
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non référencé."));
     }
 
-    // Encoding algorythm.
+    // Encoding algorithm.
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
