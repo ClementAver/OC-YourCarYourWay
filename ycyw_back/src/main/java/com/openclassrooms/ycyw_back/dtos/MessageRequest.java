@@ -20,4 +20,7 @@ public class MessageRequest {
 
     @NotNull(message = "L'utilisateur est obligatoire.")
     int user;
+
+    @NotNull(message = "Token manquant.")
+    String token;
 }

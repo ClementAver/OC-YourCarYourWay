@@ -23,6 +23,7 @@ import { MessageService } from '../../services/Message.service';
 import { UserService } from '../../services/User.service';
 import { Router } from '@angular/router';
 import { ChatWSService } from '../../services/ChatWS.service';
+import { ErrorHandler } from '../../utility/ErrorHandler';
 
 @Component({
   selector: 'chat-page',
@@ -74,7 +75,8 @@ export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
     private messageService: MessageService,
     private userService: UserService,
     private router: Router,
-    private chatWSService: ChatWSService
+    private chatWSService: ChatWSService,
+    private errorHandler: ErrorHandler
   ) {
     this.route.paramMap.subscribe((params) => {
       this.id = Number(params.get('id')) || 0;
@@ -132,15 +134,29 @@ export class ChatPage implements OnInit, AfterViewChecked, OnDestroy {
     if (this.createMessageForm.invalid || !this.chat) {
       return;
     }
+
     const content = this.createMessageForm.value.content?.trim();
     if (!content) {
       return;
     }
+
+    let token;
+    try {
+      token = this.authenticationService.getAccessToken();
+      if (!token) {
+        throw new Error('Token manquant.');
+      }
+    } catch (error) {
+      this.errorHandler.handleError(error);
+      this.router.navigate(['/connect']);
+    }
+
     // Envoi via WebSocket
     this.chatWSService.sendMessage(this.chat.id, {
       content,
       chat: this.chat.id,
       user: this.user?.id || 0,
+      token: token,
     });
     this.createMessageForm.reset();
   }
