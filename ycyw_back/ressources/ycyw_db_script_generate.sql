@@ -1,3 +1,12 @@
+CREATE DATABASE ycyw_db;
+
+USE ycyw_db;
+
+-- <user> : replace with your MySQL user
+GRANT ALL PRIVILEGES ON ycyw_bd.* TO '<user>'@'localhost';
+
+FLUSH PRIVILEGES;
+
 create table users
 (
     id         int auto_increment
