@@ -56,6 +56,12 @@ public class MessageController {
         return messageService.createMessage(messageRequest);
     }
 
+    /**
+     * Create a new message then notify chat subscribers using WebSocket
+     * @param messageRequest The message to send
+     * @return The created message
+     * @throws NotFoundException If the chat is not found
+     */
     @MessageMapping("/chat.sendMessage.{chatId}")
     // Indicates that the return value of a message-handling method should be sent as a Message to the specified destinations.
     @SendTo("/topic/chat.{chatId}")

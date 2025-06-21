@@ -13,5 +13,7 @@ public interface ChatInterface {
 
     Stream<ChatResponse> getChatsByUserId (Integer id) throws NotFoundException;
 
+    void updateChat(int id, boolean pending) throws NotFoundException;
+
     int deleteChat(Integer id) throws NotFoundException;
 }
