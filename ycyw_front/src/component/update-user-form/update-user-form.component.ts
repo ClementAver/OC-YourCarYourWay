@@ -17,7 +17,7 @@ import { User as MeResponse } from '../../interfaces';
   standalone: true,
   imports: [ReactiveFormsModule, CustomInput, CustomButton, CommonModule],
   templateUrl: './update-user-form.component.html',
-  styleUrl: './update-user-form.component.scss',
+  styleUrl: './update-user-form.component.css',
 })
 export class UpdateUserFormComponent {
   constructor(
